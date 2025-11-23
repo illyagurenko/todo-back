@@ -10,12 +10,14 @@ class DataLoader {
     }
     @PostConstruct
     private fun loadData(){
-        taskRepository.saveAll(listOf(
-            ToDoData(nameTask="math"),
-            ToDoData(nameTask="physics"),
-            ToDoData(nameTask="spring"),
-            ToDoData(nameTask="kotlin"),
-            ToDoData(nameTask="drill")
-        ))
+        if(taskRepository.count() == 0L){
+            taskRepository.saveAll(listOf(
+                ToDoData(nameTask="math"),
+                ToDoData(nameTask="physics"),
+                ToDoData(nameTask="spring"),
+                ToDoData(nameTask="kotlin"),
+                ToDoData(nameTask="drill")
+            ))
+        }
     }
 }

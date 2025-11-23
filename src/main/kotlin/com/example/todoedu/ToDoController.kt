@@ -13,31 +13,28 @@ import java.util.Optional
 
 @RestController
 @RequestMapping("/ToDoTask")
-class ToDoController(private val taskRepository: TaskRepository) {
+class ToDoController(private val toDoService: ToDoService) {
     @GetMapping
     fun getAllTasks(): Iterable<ToDoData>{
-        return taskRepository.findAll()
+        return toDoService.findAll()
     }
     @GetMapping("/{id}")
     fun getTaskById(@PathVariable id: Int): Optional<ToDoData>{
-        return taskRepository.findById(id)
+        return toDoService.findById(id)
     }
     @PostMapping
     fun setTask(@RequestBody task: ToDoData): ToDoData?{
-        return taskRepository.save(task)
+        return toDoService.save(task)
     }
     @PutMapping("/{id}")
     fun updateTask(@PathVariable id: Int, @RequestBody task: ToDoData): ResponseEntity<ToDoData>{
-        return if(taskRepository.existsById(id)){
-            task.id = id
-            val savedTask = taskRepository.save(task)
-            ResponseEntity(savedTask, HttpStatus.OK)
-        }
+        val updatedTaskOptional = toDoService.update(id, task)
+        return if(updatedTaskOptional.isPresent) ResponseEntity(updatedTaskOptional.get(), HttpStatus.OK)
         else ResponseEntity<ToDoData>( HttpStatus.NOT_FOUND)
     }
     @DeleteMapping("/{id}")
     fun deleteTask(@PathVariable id: Int){
-        return taskRepository.deleteById(id)
+        return toDoService.deleteById(id)
     }
 
 }

@@ -1,4 +1,6 @@
 package com.example.todoedu
+import com.example.todoedu.dto.ToDoRequest
+import com.example.todoedu.dto.ToDoResponse
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -15,22 +17,24 @@ import java.util.Optional
 @RequestMapping("/ToDoTask")
 class ToDoController(private val toDoService: ToDoService) {
     @GetMapping
-    fun getAllTasks(): Iterable<ToDoData>{
+    fun getAllTasks(): Iterable<ToDoResponse>{
         return toDoService.findAll()
     }
     @GetMapping("/{id}")
-    fun getTaskById(@PathVariable id: Int): Optional<ToDoData>{
-        return toDoService.findById(id)
+    fun getTaskById(@PathVariable id: Int): ResponseEntity<ToDoResponse> {
+        val task = toDoService.findById(id)
+        return if (task.isPresent) ResponseEntity.ok(task.get())
+        else ResponseEntity.notFound().build()
     }
     @PostMapping
-    fun setTask(@RequestBody task: ToDoData): ToDoData?{
-        return toDoService.save(task)
+    fun setTask(@RequestBody request: ToDoRequest): ToDoResponse?{
+        return toDoService.save(request)
     }
     @PutMapping("/{id}")
-    fun updateTask(@PathVariable id: Int, @RequestBody task: ToDoData): ResponseEntity<ToDoData>{
-        val updatedTaskOptional = toDoService.update(id, task)
-        return if(updatedTaskOptional.isPresent) ResponseEntity(updatedTaskOptional.get(), HttpStatus.OK)
-        else ResponseEntity<ToDoData>( HttpStatus.NOT_FOUND)
+    fun updateTask(@PathVariable id: Int, @RequestBody request: ToDoRequest): ResponseEntity<ToDoResponse> {
+        val updated = toDoService.update(id, request)
+        return if (updated.isPresent) ResponseEntity.ok(updated.get())
+        else ResponseEntity.notFound().build()
     }
     @DeleteMapping("/{id}")
     fun deleteTask(@PathVariable id: Int){

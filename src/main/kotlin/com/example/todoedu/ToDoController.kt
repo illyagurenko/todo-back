@@ -1,6 +1,7 @@
 package com.example.todoedu
 import com.example.todoedu.dto.ToDoRequest
 import com.example.todoedu.dto.ToDoResponse
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -27,11 +28,11 @@ class ToDoController(private val toDoService: ToDoService) {
         else ResponseEntity.notFound().build()
     }
     @PostMapping
-    fun setTask(@RequestBody request: ToDoRequest): ToDoResponse?{
+    fun setTask(@Valid @RequestBody request: ToDoRequest): ToDoResponse?{
         return toDoService.save(request)
     }
     @PutMapping("/{id}")
-    fun updateTask(@PathVariable id: Int, @RequestBody request: ToDoRequest): ResponseEntity<ToDoResponse> {
+    fun updateTask(@PathVariable id: Int, @Valid @RequestBody request: ToDoRequest): ResponseEntity<ToDoResponse> {
         val updated = toDoService.update(id, request)
         return if (updated.isPresent) ResponseEntity.ok(updated.get())
         else ResponseEntity.notFound().build()

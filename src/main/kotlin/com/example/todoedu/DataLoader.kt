@@ -2,7 +2,7 @@ package com.example.todoedu
 import org.springframework.stereotype.Component
 import jakarta.annotation.PostConstruct
 
-@Component
+//@Component
 class DataLoader {
     private val taskRepository: TaskRepository
     constructor(taskRepository: TaskRepository){

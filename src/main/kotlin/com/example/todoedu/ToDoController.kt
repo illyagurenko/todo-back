@@ -9,13 +9,16 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.http.ResponseEntity
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.CrossOrigin
 import java.util.Optional
 
 @RestController
 @RequestMapping("/ToDoTask")
+@CrossOrigin
 class ToDoController(private val toDoService: ToDoService) {
     @GetMapping
     fun getAllTasks(): Iterable<ToDoResponse>{
@@ -34,6 +37,17 @@ class ToDoController(private val toDoService: ToDoService) {
     @PutMapping("/{id}")
     fun updateTask(@PathVariable id: Int, @Valid @RequestBody request: ToDoRequest): ResponseEntity<ToDoResponse> {
         val updated = toDoService.update(id, request)
+        return if (updated.isPresent) ResponseEntity.ok(updated.get())
+        else ResponseEntity.notFound().build()
+    }
+    @PatchMapping("/{id}") // Убрали "/status", теперь адрес совпадает с фронтом
+    fun patchTask(
+        @PathVariable id: Int,
+        @RequestBody updates: Map<String, Any> // Принимаем объект {"isCompleted": true}
+    ): ResponseEntity<ToDoResponse> {
+
+        val updated = toDoService.updatePartial(id, updates)
+
         return if (updated.isPresent) ResponseEntity.ok(updated.get())
         else ResponseEntity.notFound().build()
     }

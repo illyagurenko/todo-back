@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои Задачи</title>
+    <!-- Красивый шрифт Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Иконки (корзина, галочка) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Наш дизайн -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Todo list</h1>
+    </header>
+
+    <!-- Форма добавления -->
+    <div class="input-group">
+        <input type="text" id="nameInput" placeholder="Что нужно сделать?" autocomplete="off">
+        <input type="text" id="descInput" placeholder="Описание (необязательно)" autocomplete="off">
+        <button onclick="createTask()" class="add-btn">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </div>
+
+    <!-- Список задач -->
+    <ul id="taskList">
+        <!-- Сюда JS добавит задачи -->
+        <li class="loading">Загрузка задач...</li>
+    </ul>
+</div>
+<div id="editModal" class="modal-overlay">
+    <div class="modal-content">
+        <h3>Редактировать задачу</h3>
+        <input type="hidden" id="editId">
+        <div class="input-group-vertical">
+            <label>Название</label>
+            <input type="text" id="editName">
+        </div>
+        <div class="input-group-vertical">
+            <label>Описание</label>
+            <input type="text" id="editDesc">
+        </div>
+        <div class="modal-buttons">
+            <button onclick="closeModal()" class="btn-cancel">Отмена</button>
+            <button onclick="saveEdit()" class="btn-save">Сохранить</button>
+        </div>
+    </div>
+</div>
+<!-- Наша логика -->
+<script src="script.js"></script>
+
+</body>
+</html>

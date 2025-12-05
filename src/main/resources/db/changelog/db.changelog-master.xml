@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <!-- Сюда мы будем добавлять файлы с миграциями -->
+    <!--файлы с миграциями -->
     <include file="changes/01-create-todo-table.sql" relativeToChangelogFile="true"/>
-
+    <include file="changes/02-add-completed-column.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

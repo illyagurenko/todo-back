@@ -14,11 +14,13 @@ data class ToDoData(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
     var nameTask: String = "",
-    var description: String = ""
+    var description: String = "",
+    var isCompleted: Boolean = false
 )
 
 fun ToDoData.toResponse(): ToDoResponse = ToDoResponse(
     id = this.id!!,
     nameTask = this.nameTask,
-    description = this.description
+    description = this.description,
+    isCompleted = this.isCompleted
 )

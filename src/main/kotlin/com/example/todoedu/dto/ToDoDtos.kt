@@ -8,10 +8,12 @@ data class ToDoRequest(
     val nameTask: String,
     @field:Size(max = 150, message = "описание слишком длинное")
     val description: String,
+    val isCompleted: Boolean = false,
 )
 
 data class ToDoResponse(
     val id: Int,
     val nameTask: String,
     val description: String,
+    val isCompleted: Boolean,
 )

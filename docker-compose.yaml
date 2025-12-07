@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  # --- Наша База Данных ---
+  postgres-db:
+    image: postgres:16
+    container_name: todo_postgres
+    environment:
+      POSTGRES_DB: todo_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data # Чтобы данные не стирались при перезапуске
+
+  # --- Твое Приложение ---
+  todo-app:
+    build: . # Строим из текущей папки (ищет Dockerfile)
+    container_name: todo_backend
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres-db # Ждем запуска базы
+    environment:
+      # ВАЖНО: Внутри Docker мы обращаемся к базе не как localhost,
+      # а по имени сервиса: postgres-db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/todo_db
+      DB_PASSWORD: root # Передаем пароль
+
+volumes:
+  db_data:
